@@ -20,6 +20,7 @@ var artist = process.argv[3]
 var track = process.argv[3]
 var userCommand = process.argv[2]
 
+
 var queryURL = "https://rest.bandsintown.com/artists/"
     + artist
     + "/events/?app_id=codingbootcamp"
@@ -28,9 +29,9 @@ function events() {
     axios
         .get(queryURL)
         .then(function (response) {
-
+            
             var apiReturn = response.data
-
+            
 
             for (var i = 0; i < apiReturn.length; i++) {
 
@@ -38,12 +39,12 @@ function events() {
                     continue
                 }
 
-                console.log(apiReturn[i].artist.name)
-                console.log(apiReturn[i].venue.city + ", " + apiReturn[i].venue.country)
-                console.log(moment(apiReturn[i].datetime).format("MM/DD/YYYY"))
+                console.log("Name of artist: " + apiReturn[i].artist.name)
+                console.log("location (city, country): " + apiReturn[i].venue.city + ", " + apiReturn[i].venue.country)
+                console.log("Date of event: " + moment(apiReturn[i].datetime).format("MM/DD/YYYY"))
             }
 
-            if (response = []) {
+            if (!apiReturn.length) {
                 console.log("Nothing to see here :(")
             }
 
@@ -63,6 +64,7 @@ function spotifySong() {
         if (err) {
             return console.log('error occurred ' + err)
         }
+        
         for (var i = 0; i < data.tracks.items.length; i++) {
             if(mostPop === 0){
                 likelyTrack = data.tracks.items[i]
@@ -73,9 +75,9 @@ function spotifySong() {
             }
         }
 
-        console.log(likelyTrack.name)
-        console.log(likelyTrack.artists[0].name)
-        console.log(mostPop)
+        console.log("Track name: " + likelyTrack.name)
+        console.log("Name of artist: " + likelyTrack.artists[0].name)
+        console.log("Popularity score: " + mostPop)
 
     })
 }
