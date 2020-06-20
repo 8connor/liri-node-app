@@ -24,7 +24,6 @@ var queryURL = "https://rest.bandsintown.com/artists/"
     + artist
     + "/events/?app_id=codingbootcamp"
 
-
 function events() {
     axios
         .get(queryURL)
@@ -51,19 +50,33 @@ function events() {
         })
 }
 
-
 function spotifySong() {
     spotify.search({
         type: 'track',
         query: track,
-        limit: 1
+        limit: 5
     }, function (err, data) {
+
+        var likelyTrack;
+        var mostPop = 0;
+
         if (err) {
             return console.log('error occurred ' + err)
         }
-        for(var i = 0; i < data.tracks.items.length; i++)
-        console.log(data.tracks.items[i])
-        console.log(data.tracks.items[i].artists[i].name)
+        for (var i = 0; i < data.tracks.items.length; i++) {
+            if(mostPop === 0){
+                likelyTrack = data.tracks.items[i]
+                mostPop = data.tracks.items[i].popularity
+            } else if (data.tracks.items[i].popularity > mostPop){
+                likelyTrack = data.tracks.items[i]
+                mostPop = data.tracks.items[i].popularity
+            }
+        }
+
+        console.log(likelyTrack.name)
+        console.log(likelyTrack.artists[0].name)
+        console.log(mostPop)
+
     })
 }
 
