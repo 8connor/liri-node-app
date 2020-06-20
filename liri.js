@@ -64,7 +64,7 @@ function spotifySong() {
         if (err) {
             return console.log('error occurred ' + err)
         }
-        
+        // console.log(data.tracks.items)
         for (var i = 0; i < data.tracks.items.length; i++) {
             if(mostPop === 0){
                 likelyTrack = data.tracks.items[i]
@@ -76,8 +76,10 @@ function spotifySong() {
         }
 
         console.log("Track name: " + likelyTrack.name)
+        console.log("Name of album: " + likelyTrack.album.name)
         console.log("Name of artist: " + likelyTrack.artists[0].name)
         console.log("Popularity score: " + mostPop)
+        console.log("Url: " + (likelyTrack.preview_url === null ? "unavailable" : likelyTrack.preview_url))
 
     })
 }
