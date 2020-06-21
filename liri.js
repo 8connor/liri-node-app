@@ -1,23 +1,15 @@
-var dotenv = require("dotenv").config();
+require("dotenv").config();
 var Spotify = require("node-spotify-api");
 var axios = require("axios");
-var omdb = require("omdb");
-var bitJs = require("bit_js");
 var moment = require("moment");
-// var keys = require("./key.js");
-// const spotify = require("./key.js");
+const key = require("./key.js");
 
 
-var spotify = new Spotify({
-    id: process.env.SPOTIFY_ID,
-    secret: process.env.SPOTIFY_SECRET
-});
-
-
-
+var spotify = new Spotify(key.spotify);
 
 var artist = process.argv[3]
 var track = process.argv[3]
+var userMovie = process.argv[3]
 var userCommand = process.argv[2]
 
 
@@ -30,21 +22,21 @@ function events() {
         .get(queryURL)
         .then(function (response) {
             
-            var apiReturn = response.data
+            var events = response.data
             
 
-            for (var i = 0; i < apiReturn.length; i++) {
+            for (var i = 0; i < events.length; i++) {
 
-                if (typeof (apiReturn[i].artist) === "undefined") {
+                if (typeof (events[i].artist) === "undefined") {
                     continue
                 }
 
-                console.log("Name of artist: " + apiReturn[i].artist.name)
-                console.log("location (city, country): " + apiReturn[i].venue.city + ", " + apiReturn[i].venue.country)
-                console.log("Date of event: " + moment(apiReturn[i].datetime).format("MM/DD/YYYY"))
+                console.log("Name of artist: " + events[i].artist.name)
+                console.log("location (city, country): " + events[i].venue.city + ", " + events[i].venue.country)
+                console.log("Date of event: " + moment(events[i].datetime).format("MM/DD/YYYY"))
             }
 
-            if (!apiReturn.length) {
+            if (!events.length) {
                 console.log("Nothing to see here :(")
             }
 
@@ -84,10 +76,40 @@ function spotifySong() {
     })
 }
 
+if(!userMovie){
+    
+    userMovie = "mr nobody"
+}
+
+var queryURL2 = "http://www.omdbapi.com/?t="
++ userMovie 
++ "&apikey=fbbf50d6"
+
+function movie(){
+    axios
+    .get(queryURL2)
+    .then(function (response){
+        var movie = response.data
+
+        console.log("Title: " + movie.Title)
+        console.log("Year released: " + movie.Year)
+        console.log("IMDB rating: " + movie.imdbRating)
+        console.log("Rotten Tomatoes rating: " + (typeof movie.Ratings[0] === "undefined" || typeof movie.Ratings[1] === "undefined" || typeof movie.Ratings[2] === "undefined" ? "unavailable" : movie.Ratings[1].Value))
+        console.log("Country the movie was produced: " + movie.Country)
+        console.log("Language: " + movie.Language)
+        console.log("Plot of the movie: " + movie.Plot)
+        console.log("Cast: " + movie.Actors)
+
+    })
+}
+
+
 if (userCommand === "concert-this") {
-    events()
+    events();
 } else if (userCommand === "spotify-this-song") {
-    spotifySong()
+    spotifySong();
+}else if(userCommand === "movie-this"){
+    movie();
 }else{
     console.log("invalid command! please type \"concert-this\" spotify-this-song followed by an argument.")
-}
+};
