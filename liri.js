@@ -64,7 +64,7 @@ function spotifySong() {
         if (err) {
             return console.log('error occurred ' + err)
         }
-        // console.log(data.tracks.items)
+        
         for (var i = 0; i < data.tracks.items.length; i++) {
             if(mostPop === 0){
                 likelyTrack = data.tracks.items[i]
@@ -88,4 +88,6 @@ if (userCommand === "concert-this") {
     events()
 } else if (userCommand === "spotify-this-song") {
     spotifySong()
+}else{
+    console.log("invalid command! please type \"concert-this\" spotify-this-song followed by an argument.")
 }
