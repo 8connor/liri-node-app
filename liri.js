@@ -90,8 +90,13 @@ function movie(){
     .get(queryURL2)
     .then(function (response){
         var movie = response.data
-
-        console.log("Title: " + movie.Title)
+        
+        if(movie.Title === undefined){
+            console.log("Movie not found! Check your spelling!")
+            return
+        }
+        
+        console.log("Title: " + movie.Title)       
         console.log("Year released: " + movie.Year)
         console.log("IMDB rating: " + movie.imdbRating)
         console.log("Rotten Tomatoes rating: " + (typeof movie.Ratings[0] === "undefined" || typeof movie.Ratings[1] === "undefined" || typeof movie.Ratings[2] === "undefined" ? "unavailable" : movie.Ratings[1].Value))
@@ -99,6 +104,7 @@ function movie(){
         console.log("Language: " + movie.Language)
         console.log("Plot of the movie: " + movie.Plot)
         console.log("Cast: " + movie.Actors)
+
 
     })
 }
